@@ -10,7 +10,7 @@ uses: docker/login-action@v1
 with:
 registry: ghcr.io
 username: Athugodage
-password: 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
+password: 
 - name: Build the hello-docker Docker image
 run: |
        docker build . --tag ghcr.io/athugodage/hello-docker-gcr-demo:latest
