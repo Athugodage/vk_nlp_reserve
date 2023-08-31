@@ -46,4 +46,4 @@ COPY . .
 EXPOSE 8000
 
 # Run the application.
-CMD C:\Users\athug\AppData\Local\Microsoft\WindowsApps\python3.10.exe main.py
+CMD python main.py

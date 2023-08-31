@@ -10,9 +10,9 @@ uses: docker/login-action@v1
 with:
 registry: ghcr.io
 username: Athugodage
-password: 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
+password: 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
 - name: Build the hello-docker Docker image
 run: |
-       docker build . --tag ghcr.io/deselikem/hello-docker-gcr-demo:latest
-       docker run ghcr.io/deselikem/hello-docker-gcr-demo:latest
-       docker push ghcr.io/deselikem/hello-docker-gcr-demo:latest
+       docker build . --tag ghcr.io/athugodage/hello-docker-gcr-demo:latest
+       docker run ghcr.io/athugodage/hello-docker-gcr-demo:latest
+       docker push ghcr.io/athugodage/hello-docker-gcr-demo:latest
