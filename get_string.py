@@ -1,6 +1,9 @@
 import stanza
 import requests
 
+nlp = stanza.Pipeline(lang='ru')
+
+
 def ifpos(word, sent, close1, close2):
 
     neighbours = ''
@@ -18,57 +21,59 @@ def ifpos(word, sent, close1, close2):
 
 
 
-def find_relatives(text, ents):
+def find_relatives(text, ent):
     ent_with_relatives = []
 
     for sent in nlp(text).sentences:
         for word in sent.words:
-          for ent in ents:
-            if word.text in ent.split(' '):
-              try:
-                pos = word.pos
+            if word.text in ent:
+                try:
+                    pos = word.pos
 
-                if len(sent.words) > 8:
+                    if len(sent.words) > 8:
 
-                    if word.head == 0:
-                      relative_words = ifpos(word, sent, close1=-1, close2=-2)
-                      new_string = f'{relative_words[0]} {relative_words[1]} {word.text}'
+                        if word.head == 0:
+                            relative_words = ifpos(word, sent, close1=-1, close2=-2)
+                            new_string = f'{relative_words[0]} {relative_words[1]} {word.text}'
 
 
-                    elif word.head == 1:
-                      relative_words = ifpos(word, sent, close1=-1, close2=1)
-                      new_string = f'{relative_words[0]} {word.text} {relative_words[1]}'
+                        elif word.head == 1:
+                            relative_words = ifpos(word, sent, close1=-1, close2=1)
+                            new_string = f'{relative_words[0]} {word.text} {relative_words[1]}'
+
+                        else:
+                            relative_words = ifpos(word, sent, close1=1, close2=2)
+                            new_string = f'{word.text} {relative_words[0]} {relative_words[1]}'
 
                     else:
-                      relative_words = ifpos(word, sent, close1=1, close2=2)
-                      new_string = f'{word.text} {relative_words[0]} {relative_words[1]}'
+                        relative_words = 'Bad Application'
+                        new_string = sent.text
 
-                else:
+
+                except:
                     relative_words = 'Bad Application'
                     new_string = sent.text
 
 
-              except:
-                relative_words = 'Bad Application'
-                new_string = sent.text
+                result = (word.text, word.deprel, word.head, pos, relative_words, new_string)
+                ent_with_relatives.append(result)
+    
+            else:
+                pass
+            
+    if len(ent_with_relatives) > 1:
+        result = ent_with_relatives[0][-1]
+    elif len(ent_with_relatives) == 0 or ent_with_relatives == None:
+        result = text
+    else:
+        result = ent_with_relatives[-1]
+        
+    return result
 
+        
+        
+def implement(text, ents):
 
-              result = (word.text, word.deprel, word.head, pos, relative_words, new_string)
-              ent_with_relatives.append(result)
-    return ent_with_relatives
-
-def implement(source='https://files.deeppavlov.ai/tmp/processed_posts.json'):
-    r = requests.get(source)
-    page = r.json()
-
-    nlp = stanza.Pipeline(lang='ru')
-
-    output = []
-
-    for n in range(3):
-        text = page[n]['text']
-        knowledge = page[n]["entity_info"]
-        ents = [knowledge[n]['substring'] for n in range(len(knowledge))]
-        output.append(find_relatives(text, ents))
+    output = find_relatives(text, ents)
 
     return output
