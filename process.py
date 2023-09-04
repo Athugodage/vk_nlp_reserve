@@ -62,6 +62,6 @@ for n in tqdm(range(len(data))):
                 total_result[num] = dictionary
 
 
-with open(f'processed_posts_{n}.json', 'w') as f:
+with open(f'processed_posts.json', 'w') as f:
     json.dump(total_result, f)
                             
