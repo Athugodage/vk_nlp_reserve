@@ -8,12 +8,12 @@ class Sentiment_classification():
     def __init__(self,
                  model_checkpoint="MonoHime/rubert-base-cased-sentiment-new"):
 
-        self.tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
-        self.model = AutoModelForSequenceClassification.from_pretrained(model_checkpoint)
+        #self.tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
+        #self.model = AutoModelForSequenceClassification.from_pretrained(model_checkpoint)
 
         self.classifier = pipeline('text-classification',
-                                   model=self.model,
-                                   tokenizer=self.tokenizer)
+                                   model=model_checkpoint,
+                                   tokenizer=model_checkpoint)
 
     def classify_text(self, text):
         '''
@@ -34,12 +34,12 @@ class Sentiment_classification():
 class Emotion_detection():
     def __init__(self,
                  model_checkpoint="cointegrated/rubert-tiny2-cedr-emotion-detection"):
-        self.tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
-        self.model = AutoModelForSequenceClassification.from_pretrained(model_checkpoint)
+        #self.tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
+        #self.model = AutoModelForSequenceClassification.from_pretrained(model_checkpoint)
 
         self.classifier = pipeline('text-classification',
-                                   model=self.model,
-                                   tokenizer=self.tokenizer)
+                                   model=model_checkpoint,
+                                   tokenizer=model_checkpoint)
 
 
     def classify_text(self, text):
