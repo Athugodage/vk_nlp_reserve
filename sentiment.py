@@ -6,14 +6,17 @@ from tqdm import tqdm
 
 class Sentiment_classification():
     def __init__(self,
-                 model_checkpoint="MonoHime/rubert-base-cased-sentiment-new"):
+                 model_checkpoint="marcus2000/HSE_VK_NLP_sentiment_version3",
+                tokenizer_checkpoint="MonoHime/rubert-base-cased-sentiment-new"):
 
-        self.tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
+        self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_checkpoint)
         self.model = AutoModelForSequenceClassification.from_pretrained(model_checkpoint)
 
         self.classifier = pipeline('text-classification',
                                    model=self.model,
-                                   tokenizer=self.tokenizer)
+                                   tokenizer=self.tokenizer,
+                                   device='cuda')
+
 
     def classify_text(self, text):
         '''
@@ -25,21 +28,19 @@ class Sentiment_classification():
 
         return str(self.classifier(text)[0]['label'])
 
-
-    def predict_dataset(self):
-        pass
 
 
 
 class Emotion_detection():
     def __init__(self,
                  model_checkpoint="cointegrated/rubert-tiny2-cedr-emotion-detection"):
-        self.tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
-        self.model = AutoModelForSequenceClassification.from_pretrained(model_checkpoint)
+        #self.tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
+        #self.model = AutoModelForSequenceClassification.from_pretrained(model_checkpoint)
 
         self.classifier = pipeline('text-classification',
-                                   model=self.model,
-                                   tokenizer=self.tokenizer)
+                                   model=model_checkpoint,
+                                   tokenizer=model_checkpoint,
+                                   device='cuda')
 
 
     def classify_text(self, text):
@@ -51,10 +52,6 @@ class Emotion_detection():
         '''
 
         return str(self.classifier(text)[0]['label'])
-
-
-    def predict_dataset(self):
-        pass
 
 
 
