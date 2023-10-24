@@ -1,6 +1,4 @@
 import re
-import emoji
-from translate import Translator
 from tqdm import tqdm
 
 def find_congratulation(text):

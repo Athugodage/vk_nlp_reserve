@@ -2,22 +2,25 @@ from sentiment import Sentiment_classification, Emotion_detection, Toxicity_dete
 from dataset import VKPostsDataset
 from preprocessing import clean, find_congratulation, emoji2text
 
+from translate import Translator
+
 #from deep_translator import GoogleTranslator
 
 from tqdm import tqdm
 
-import json
 import pandas as pd
-import requests
-import re
 
 import argparse
+import emoji
 
 parser = argparse.ArgumentParser(description='Sentiment analysis & Emotion detection & Toxicity & Spam')
 parser.add_argument('load_path', type=str, help='Path to the dataset for annotation (with file name)')
 parser.add_argument('save_path', type=str, help='Path to save the result (with file name)')
 parser.add_argument('--check_congrats', type=bool, default=False, help='Detect posts with congratulations')
 parser.add_argument('--with_entities', type=bool, default=False, help='if you want to process a dataset with entities, type True')
+parser.add_argument('--convert_emoji', type=bool, default=False, help='if you convert emoji into text, type True. On big dataasets it may not work')
+
+
 args = parser.parse_args()
 
 tqdm.pandas()
@@ -40,10 +43,16 @@ with open(file, 'r') as f:
 
 df['text'] = df['text'].apply(clean)
 
+if args.convert_emoji == True:
+    translator = Translator(to_lang="ru")
+    df['text'] = df['text'].progress_apply(lambda x: emoji2text(x, emoji, translator))
+
+
 if args.with_entities == True:
     with_entities = True
 else:
     with_entities = False
+
 dataset = VKPostsDataset(data=df, with_entities=with_entities)
 
 

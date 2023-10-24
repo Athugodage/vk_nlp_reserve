@@ -14,7 +14,6 @@ class VKPostsDataset(Dataset):
 
                 self.result[idx] = {
                     'id': data.iloc[n]['id'],
-                    'original_message': data.iloc[n]['original_text'],
                     'message': data.iloc[n]['text'],
                     'sentiment': None,
                     'message_number': n,
